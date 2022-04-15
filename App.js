@@ -1,32 +1,56 @@
-import {
-  StyleSheet,
-  View,
-  Button,
-  TextInput,
-  FlatList,
-} from "react-native";
+import { StyleSheet, View, Button, TextInput, FlatList } from "react-native";
 import { useState } from "react";
 import { GoalItem } from "./components/GoalItem";
 import { GoalInput } from "./components/GoalInput";
+import { StatusBar } from "expo-status-bar";
 
 export default function App() {
+  const [modalIsVisible, setModalIsVisible] = useState(false);
   const [courseGoals, setCourseGoals] = useState([]);
+
+  const startAddGoalHandler = () => {
+    setModalIsVisible(true);
+  };
+
+  const endAddGoalHandler = () => {
+    setModalIsVisible(false);
+  };
 
   const addGoalHandler = (enteredGoalText) => {
     setCourseGoals((currentCourseGoals) => [
       ...currentCourseGoals,
       { text: enteredGoalText, id: currentCourseGoals.length },
     ]);
+    endAddGoalHandler();
+  };
+
+  const deleteGoalHanlder = (id) => {
+    setCourseGoals((currentCourseGoals) => {
+      return currentCourseGoals.filter((goal) => goal.id !== id);
+    });
   };
 
   return (
-    <View style={styles.appContainer}>
-      <GoalInput onAddGoal={addGoalHandler}/>
-      <View style={styles.goalsContainer}>
-        {/* We can make the View scrollable with scrollView. But this is applicable only when list is having definite end. 
+    <>
+      <StatusBar style='light' />
+      <View style={styles.appContainer}>
+        <Button
+          title="Add new goal"
+          color={"#a065ec"}
+          onPress={startAddGoalHandler}
+        />
+        {modalIsVisible && (
+          <GoalInput
+            onAddGoal={addGoalHandler}
+            visible={modalIsVisible}
+            onCancel={endAddGoalHandler}
+          />
+        )}
+        <View style={styles.goalsContainer}>
+          {/* We can make the View scrollable with scrollView. But this is applicable only when list is having definite end. 
         When list is too long then lazily loading it would be better which we can achieve using FlatList which loads the list items only when user is about to see them.
         This will increase the performance */}
-        {/* <ScrollView alwaysBounceVertical={false}>
+          {/* <ScrollView alwaysBounceVertical={false}>
           {courseGoals.map((goal, index) => {
             return (
               <View key={index} style={styles.goalItem}>
@@ -35,18 +59,23 @@ export default function App() {
             );
           })}
         </ScrollView> */}
-        <FlatList
-          data={courseGoals}
-          keyExtractor={(item, index) => item.id}
-          renderItem={(itemData) => {
-            return (
-              <GoalItem text={itemData.item.text}/>
-            );
-          }}
-          alwaysBounceVertical={false}
-        />
+          <FlatList
+            data={courseGoals}
+            keyExtractor={(item, index) => item.id}
+            renderItem={(itemData) => {
+              return (
+                <GoalItem
+                  text={itemData.item.text}
+                  id={itemData.item.id}
+                  onDeleteItem={deleteGoalHanlder}
+                />
+              );
+            }}
+            alwaysBounceVertical={false}
+          />
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 
