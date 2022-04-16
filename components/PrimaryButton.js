@@ -1,14 +1,12 @@
 import { Text, View, Pressable, StyleSheet } from "react-native";
+import Colors from '../constants/colors'
 
-export const PrimaryButton = ({ children }) => {
-  const pressHandler = () => {
-    console.log("inside press");
-  };
+export const PrimaryButton = ({ children, onPress }) => {
   return (
     <View style={styles.buttonOuterContainer}>
       <Pressable
-        onPress={pressHandler}
-        android_ripple={{ color: "#640233" }}
+        onPress={onPress}
+        android_ripple={{ color: Colors.primary600 }}
         //If you want to pass multiple styles, then you can pass array of multiple styles.
         style={({ pressed }) =>
           pressed
@@ -31,7 +29,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   buttonInnerContainer: {
-    backgroundColor: "#72063c",
+    backgroundColor: Colors.primary500,
     paddingVertical: 8,
     paddingHorizontal: 16,
     elevation: 2,
