@@ -1,4 +1,13 @@
-import { Text, TextInput, View, StyleSheet, Alert } from "react-native";
+import {
+  Dimensions,
+  TextInput,
+  View,
+  StyleSheet,
+  Alert,
+  useWindowDimensions,
+  KeyboardAvoidingView,
+  ScrollView,
+} from "react-native";
 import { PrimaryButton } from "../components/ui/PrimaryButton";
 import { useState } from "react";
 import Colors from "../constants/colors";
@@ -8,6 +17,8 @@ import { InstructionText } from "../components/ui/InstructionText";
 
 export const StartGameScreen = ({ onPickNumber }) => {
   const [enteredNumber, setEnteredNumber] = useState("");
+
+  const { width, height } = useWindowDimensions();
 
   const numberInputHandler = (enteredNumber) => {
     setEnteredNumber(enteredNumber);
@@ -32,40 +43,54 @@ export const StartGameScreen = ({ onPickNumber }) => {
     onPickNumber(chosenNumber);
   };
 
+  const marginTopDistance = height < 380 ? 30 : 100;
+
   return (
-    <View style={styles.rootContainer}>
-      <InstructionText>Guess my number</InstructionText>
-      <Card>
-        <InstructionText>Enter a Number</InstructionText>
-        {/* To control the type of keyboard which pops up when user clicks on input field, there is a prop called keyboardType */}
-        <TextInput
-          style={styles.numberInput}
-          maxLength={2}
-          //number-pad is a cross-platform value.
-          keyboardType="number-pad"
-          //Not important when input is number. But when input type is text then this would ensure that it's not auto capitalized
-          autoCapitalize="none"
-          autoCorrect={false}
-          value={enteredNumber}
-          onChangeText={numberInputHandler}
-        />
-        <View style={styles.buttonsContainer}>
-          <View style={styles.buttonContainer}>
-            <PrimaryButton onPress={resetInputHandler}>Reset</PrimaryButton>
-          </View>
-          <View style={styles.buttonContainer}>
-            <PrimaryButton onPress={confirmInputHandler}>Confirm</PrimaryButton>
-          </View>
+    <ScrollView style={styles.screen}>
+      {/* behavior = position/height/padding */}
+      <KeyboardAvoidingView style={styles.screen} behavior={"position"}>
+        <View style={[styles.rootContainer, { marginTop: marginTopDistance }]}>
+          <Title>Guess my number</Title>
+          <Card>
+            <InstructionText>Enter a Number</InstructionText>
+            {/* To control the type of keyboard which pops up when user clicks on input field, there is a prop called keyboardType */}
+            <TextInput
+              style={styles.numberInput}
+              maxLength={2}
+              //number-pad is a cross-platform value.
+              keyboardType="number-pad"
+              //Not important when input is number. But when input type is text then this would ensure that it's not auto capitalized
+              autoCapitalize="none"
+              autoCorrect={false}
+              value={enteredNumber}
+              onChangeText={numberInputHandler}
+            />
+            <View style={styles.buttonsContainer}>
+              <View style={styles.buttonContainer}>
+                <PrimaryButton onPress={resetInputHandler}>Reset</PrimaryButton>
+              </View>
+              <View style={styles.buttonContainer}>
+                <PrimaryButton onPress={confirmInputHandler}>
+                  Confirm
+                </PrimaryButton>
+              </View>
+            </View>
+          </Card>
         </View>
-      </Card>
-    </View>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
+const deviceHeight = Dimensions.get("window").height;
+
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
   rootContainer: {
     flex: 1,
-    marginTop: 100,
+    marginTop: deviceHeight < 380 ? 30 : 100,
     alignItems: "center",
   },
   numberInput: {

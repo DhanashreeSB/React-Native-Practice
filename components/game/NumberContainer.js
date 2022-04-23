@@ -1,5 +1,5 @@
-import { Text, View, Pressable, StyleSheet } from "react-native";
-import Colors from '../../constants/colors'
+import { Text, View, StyleSheet, Dimensions } from "react-native";
+import Colors from "../../constants/colors";
 
 export const NumberContainer = ({ children }) => {
   return (
@@ -9,20 +9,23 @@ export const NumberContainer = ({ children }) => {
   );
 };
 
+//In iOS, screen and window are same. But in android, screen = including the status bar, window = excluding the status bar
+const deviceWidth = Dimensions.get("window").width;
+
 const styles = StyleSheet.create({
   container: {
     borderWidth: 4,
     borderColor: Colors.accent500,
-    padding: 24,
-    margin: 24,
+    padding: deviceWidth < 380 ? 12 : 24,
+    margin: deviceWidth < 380 ? 12 : 24,
     borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: "center",
+    justifyContent: "center",
   },
   numberText: {
-      color:Colors.accent500,
-      fontSize: 36,
-      // fontWeight: 'bold',
-      fontFamily: 'open-sans-bold',
-  }
+    color: Colors.accent500,
+    fontSize: deviceWidth < 380 ? 28 : 36,
+    // fontWeight: 'bold',
+    fontFamily: "open-sans-bold",
+  },
 });
