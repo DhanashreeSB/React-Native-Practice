@@ -9,6 +9,7 @@ import { MealsOverviewScreen } from "./screens/MealsOverviewScreen";
 import { MealDetailScreen } from "./screens/MealDetailScreen";
 import { FavoritesScreen } from "./screens/FavoritesScreen";
 import "react-native-gesture-handler";
+import { FavoritesContextProvider } from "./store/context/favorites-context";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -60,53 +61,55 @@ export default function App() {
   return (
     <>
       <StatusBar style={"light"} />
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerStyle: {
-              backgroundColor: "#351401",
-            },
-            headerTintColor: "white",
-            //Background color can be set using contentColor property
-            contentStyle: {
-              backgroundColor: "#3f2f25",
-            },
-          }}
-        >
-          <Stack.Screen
-            name="Drawer"
-            component={DrawerNavigator}
-            options={{
-              title: "All categories",
-              headerShown: false,
+      <FavoritesContextProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: {
+                backgroundColor: "#351401",
+              },
+              headerTintColor: "white",
+              //Background color can be set using contentColor property
+              contentStyle: {
+                backgroundColor: "#3f2f25",
+              },
             }}
-          />
-          <Stack.Screen
-            name="MealsOverview"
-            component={MealsOverviewScreen}
-            // options={({ route, navigation }) => {
-            //   //This function returns options object same as specified in MealsCategories Stack.Screen. Only the difference here is that in this case, route and navigation objects are accessible.
-            //   const catId = route.params.categoryId;
-            //   return {
-            //     title: catId,
-            //   };
-            // }}
-          />
-          <Stack.Screen
-            name="MealDetail"
-            component={MealDetailScreen}
-            options={{
-              title: "About the meal",
-              // We can add button/element in Header section using following option.
-              // But if we want the onPress of button in header to interact with the screen components, then it won't be possible in App.js.
-              // So to deal with the issue mentioned above, we have another alternative. We can set this option in the screen dirctly.
-              // headerRight: () => {
-              //   return <Button title={'Tap me!'}/>
-              // }
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+          >
+            <Stack.Screen
+              name="Drawer"
+              component={DrawerNavigator}
+              options={{
+                title: "All categories",
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="MealsOverview"
+              component={MealsOverviewScreen}
+              // options={({ route, navigation }) => {
+              //   //This function returns options object same as specified in MealsCategories Stack.Screen. Only the difference here is that in this case, route and navigation objects are accessible.
+              //   const catId = route.params.categoryId;
+              //   return {
+              //     title: catId,
+              //   };
+              // }}
+            />
+            <Stack.Screen
+              name="MealDetail"
+              component={MealDetailScreen}
+              options={{
+                title: "About the meal",
+                // We can add button/element in Header section using following option.
+                // But if we want the onPress of button in header to interact with the screen components, then it won't be possible in App.js.
+                // So to deal with the issue mentioned above, we have another alternative. We can set this option in the screen dirctly.
+                // headerRight: () => {
+                //   return <Button title={'Tap me!'}/>
+                // }
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </FavoritesContextProvider>
     </>
   );
 }
