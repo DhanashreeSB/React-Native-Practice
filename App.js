@@ -8,8 +8,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { MealsOverviewScreen } from "./screens/MealsOverviewScreen";
 import { MealDetailScreen } from "./screens/MealDetailScreen";
 import { FavoritesScreen } from "./screens/FavoritesScreen";
+import { Provider } from "react-redux";
 import "react-native-gesture-handler";
-import { FavoritesContextProvider } from "./store/context/favorites-context";
+import { store } from "./store/redux/store";
+// import { FavoritesContextProvider } from "./store/context/favorites-context";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -61,7 +63,7 @@ export default function App() {
   return (
     <>
       <StatusBar style={"light"} />
-      <FavoritesContextProvider>
+      <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{
@@ -109,7 +111,7 @@ export default function App() {
             />
           </Stack.Navigator>
         </NavigationContainer>
-      </FavoritesContextProvider>
+      </Provider>
     </>
   );
 }
